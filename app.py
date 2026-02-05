@@ -1,196 +1,129 @@
 import streamlit as st
-import pandas as pd
 
 # -----------------------------
 # App Configuration
 # -----------------------------
 st.set_page_config(
-    page_title="Researcher Profile | Luyanda Mpanza",
+    page_title="Research Profile | Luyanda Mpanza",
     layout="wide"
 )
 
 # -----------------------------
-# Researcher Info (Static)
+# Title
 # -----------------------------
-name = "Luyanda Nqobani Mpanza"
-field = "Computer Science (Natural Language Processing)"
-institution = "University of Zululand"
-email = "luyanda.mpanza@unizulu.ac.za"
+st.title("Research Profile")
 
 # -----------------------------
-# Session State
+# Researcher Information
 # -----------------------------
-if "research_data" not in st.session_state:
-    st.session_state.research_data = {
-        "title": "Morpheme-Aware Tokenization for isiZulu Language Models",
-        "interests": (
-            "African language NLP, isiZulu morphology, morpheme-aware tokenization, "
-            "low-resource language modeling, transformer-based language models, "
-            "fair and inclusive AI"
-        ),
-        "methodology": "Computational / Simulation-based",
-        "tools": [
-            "Python",
-            "Streamlit",
-            "Pandas",
-            "Machine Learning",
-            "Deep Learning / Transformers"
-        ],
-        "description": (
-            "This research investigates the integration of linguistically grounded "
-            "morphological knowledge into subword tokenization for isiZulu, a "
-            "morphologically rich and low-resource African language. "
-            "The study proposes a hybrid rule-based and BPE-constrained tokenizer "
-            "derived from the SADiLaR isiZulu Morphological Annotation Protocol. "
-            "The tokenizer is evaluated within a full transformer-based language "
-            "modeling pipeline, comparing standard BPE against morpheme-aware BPE "
-            "using metrics such as fertility, morphological edit distance, boundary "
-            "F1 score, perplexity, and BLEU. The work contributes toward more "
-            "linguistically faithful and equitable language technologies for "
-            "African languages."
-        )
-    }
+st.header("Researcher Information")
+
+st.markdown("""
+**Name:** Luyanda Nqobani Mpanza  
+**Field:** Computer Science (Natural Language Processing)  
+**Institution:** University of Zululand  
+**Email:** luyanda.mpanza@unizulu.ac.za  
+""")
 
 # -----------------------------
-# TITLE
+# Research Title
 # -----------------------------
-st.title("Researcher Profile")
+st.header("Research Title")
 
-# -----------------------------
-# PROFILE OVERVIEW
-# -----------------------------
-st.header("Researcher Overview")
-st.write(f"**Name:** {name}")
-st.write(f"**Field:** {field}")
-st.write(f"**Institution:** {institution}")
-
-st.image(
-    "https://media.istockphoto.com/id/1312417734/photo/social-networking-service-streaming-video-communication-network-3d-illustration.jpg",
-    caption="Language technology, computation, and data-driven research",
-    use_column_width=True
-)
+st.markdown("""
+**Morpheme-Aware Tokenization for isiZulu Language Models**
+""")
 
 # -----------------------------
-# RESEARCH INFORMATION
+# Research Focus
 # -----------------------------
-st.header("Research Information")
+st.header("Research Focus")
 
-with st.form("research_form"):
-    research_title = st.text_input(
-        "Research Title",
-        value=st.session_state.research_data["title"]
-    )
+st.markdown("""
+This research addresses the limitations of standard subword tokenization
+methods when applied to isiZulu, a morphologically rich and low-resource
+African language.
 
-    research_interests = st.text_area(
-        "Research Interests",
-        value=st.session_state.research_data["interests"]
-    )
-
-    methodology = st.selectbox(
-        "Research Methodology",
-        [
-            "Quantitative",
-            "Qualitative",
-            "Mixed Methods",
-            "Experimental",
-            "Computational / Simulation-based"
-        ],
-        index=4
-    )
-
-    tools = st.multiselect(
-        "Tools & Technologies Used",
-        [
-            "Python",
-            "Streamlit",
-            "Pandas",
-            "NumPy",
-            "Machine Learning",
-            "Deep Learning / Transformers",
-            "SQL",
-            "Cloud Platforms"
-        ],
-        default=st.session_state.research_data["tools"]
-    )
-
-    description = st.text_area(
-        "Research Description / Abstract",
-        height=220,
-        value=st.session_state.research_data["description"]
-    )
-
-    submitted = st.form_submit_button("Save Research Information")
-
-    if submitted:
-        st.session_state.research_data.update({
-            "title": research_title,
-            "interests": research_interests,
-            "methodology": methodology,
-            "tools": tools,
-            "description": description
-        })
-        st.success("Research information updated.")
+Conventional Byte Pair Encoding (BPE) methods ignore linguistic structure,
+often splitting words in ways that violate valid morpheme boundaries.
+This work proposes a linguistically grounded, morpheme-aware tokenization
+approach that integrates explicit isiZulu morphological rules into the
+tokenization process.
+""")
 
 # -----------------------------
-# RESEARCH SUMMARY
+# Methodology
 # -----------------------------
-st.header("Research Summary")
+st.header("Methodology")
 
-st.markdown(f"### {st.session_state.research_data['title']}")
-st.write(f"**Methodology:** {st.session_state.research_data['methodology']}")
-st.write(f"**Tools:** {', '.join(st.session_state.research_data['tools'])}")
-st.markdown("**Abstract**")
-st.write(st.session_state.research_data["description"])
+st.markdown("""
+The study follows a **computational and experimental methodology**:
 
-# -----------------------------
-# PUBLICATIONS
-# -----------------------------
-st.header("Publications")
-
-uploaded_file = st.file_uploader(
-    "Upload a CSV file of publications",
-    type="csv"
-)
-
-if uploaded_file:
-    publications = pd.read_csv(uploaded_file)
-    st.dataframe(publications, use_container_width=True)
-
-    keyword = st.text_input("Filter publications by keyword")
-
-    if keyword:
-        filtered = publications[
-            publications.apply(
-                lambda row: keyword.lower() in row.astype(str).str.lower().values,
-                axis=1
-            )
-        ]
-        st.subheader(f"Filtered Results for '{keyword}'")
-        st.dataframe(filtered, use_container_width=True)
-else:
-    st.info("Upload a CSV file (e.g. Title, Year, Venue, Authors).")
+- Formalisation of isiZulu morphological segmentation rules based on the
+  SADiLaR isiZulu Morphological Annotation Protocol.
+- Development of a deterministic, rule-based morphological tokenizer.
+- Integration of morphology-aware constraints into a BPE-based subword
+  learning framework.
+- Training of transformer-based language models using both standard BPE
+  and morpheme-aware BPE tokenizers.
+- Comparative evaluation using intrinsic and extrinsic metrics.
+""")
 
 # -----------------------------
-# PUBLICATION TRENDS
+# Evaluation
 # -----------------------------
-st.header("Publication Trends")
+st.header("Evaluation Strategy")
 
-if uploaded_file and "Year" in publications.columns:
-    year_counts = publications["Year"].value_counts().sort_index()
-    st.bar_chart(year_counts)
-elif uploaded_file:
-    st.warning("CSV must include a 'Year' column.")
+st.markdown("""
+The proposed tokenizer is evaluated within a full language modelling
+pipeline using the following metrics:
+
+- Token fertility to measure segmentation efficiency.
+- Morphological edit distance to assess alignment with gold morpheme
+  boundaries.
+- Boundary precision, recall, and F1 score.
+- Cross-entropy loss and perplexity for language modelling performance.
+- BLEU score to evaluate generated text quality.
+""")
 
 # -----------------------------
-# CONTACT
+# Tools and Technologies
 # -----------------------------
-st.header("Contact Information")
-st.write(f"**Researcher:** {name}")
-st.write(f"**Email:** {email}")
-st.write(f"**Institution:** {institution}")
+st.header("Tools and Technologies")
 
-st.markdown(
-    "For academic collaboration, supervision discussions, "
-    "or research on African language technologies and NLP, "
-    "please use the contact details above."
-)
+st.markdown("""
+- Python  
+- Rule-based morphological parsing  
+- Byte Pair Encoding (BPE)  
+- Transformer-based language models  
+- PyTorch / deep learning frameworks  
+""")
+
+# -----------------------------
+# Contribution
+# -----------------------------
+st.header("Research Contribution")
+
+st.markdown("""
+This research contributes:
+
+- A linguistically grounded morpheme-aware tokenizer for isiZulu.
+- A reproducible integration strategy for linguistic rules and subword
+  tokenization.
+- Empirical evidence that morphology-aware tokenization improves language
+  modelling for agglutinative African languages.
+- A step toward fairer and more inclusive language technologies for
+  low-resource languages.
+""")
+
+# -----------------------------
+# Contact
+# -----------------------------
+st.header("Contact")
+
+st.markdown("""
+For academic collaboration or research inquiries:
+
+**Email:** luyanda.mpanza@unizulu.ac.za  
+**Institution:** University of Zululand
+""")
