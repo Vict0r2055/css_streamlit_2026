@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 
 # -----------------------------
 # App Configuration
@@ -9,121 +10,167 @@ st.set_page_config(
 )
 
 # -----------------------------
-# Title
+# TITLE
 # -----------------------------
 st.title("Research Profile")
+st.caption("Morpheme-Aware Tokenization for isiZulu")
 
 # -----------------------------
-# Researcher Information
+# SIDEBAR NAVIGATION
 # -----------------------------
-st.header("Researcher Information")
-
-st.markdown("""
-**Name:** Luyanda Nqobani Mpanza  
-**Field:** Computer Science (Natural Language Processing)  
-**Institution:** University of Zululand  
-**Email:** luyanda.mpanza@unizulu.ac.za  
-""")
-
-# -----------------------------
-# Research Title
-# -----------------------------
-st.header("Research Title")
-
-st.markdown("""
-**Morpheme-Aware Tokenization for isiZulu Language Models**
-""")
+section = st.sidebar.radio(
+    "Navigate",
+    [
+        "Overview",
+        "Research Problem",
+        "Methodology",
+        "Tokenizer Pipeline",
+        "Evaluation Metrics",
+        "Contribution & Impact"
+    ]
+)
 
 # -----------------------------
-# Research Focus
+# OVERVIEW
 # -----------------------------
-st.header("Research Focus")
+if section == "Overview":
+    st.header("Researcher Information")
 
-st.markdown("""
-This research addresses the limitations of standard subword tokenization
-methods when applied to isiZulu, a morphologically rich and low-resource
-African language.
+    st.markdown("""
+    **Name:** Luyanda Nqobani Mpanza  
+    **Field:** Computer Science (Natural Language Processing)  
+    **Institution:** University of Zululand  
+    **Email:** luyanda.mpanza@unizulu.ac.za  
+    """)
 
-Conventional Byte Pair Encoding (BPE) methods ignore linguistic structure,
-often splitting words in ways that violate valid morpheme boundaries.
-This work proposes a linguistically grounded, morpheme-aware tokenization
-approach that integrates explicit isiZulu morphological rules into the
-tokenization process.
-""")
-
-# -----------------------------
-# Methodology
-# -----------------------------
-st.header("Methodology")
-
-st.markdown("""
-The study follows a **computational and experimental methodology**:
-
-- Formalisation of isiZulu morphological segmentation rules based on the
-  SADiLaR isiZulu Morphological Annotation Protocol.
-- Development of a deterministic, rule-based morphological tokenizer.
-- Integration of morphology-aware constraints into a BPE-based subword
-  learning framework.
-- Training of transformer-based language models using both standard BPE
-  and morpheme-aware BPE tokenizers.
-- Comparative evaluation using intrinsic and extrinsic metrics.
-""")
+    st.subheader("Research Title")
+    st.markdown("**Morpheme-Aware Tokenization for isiZulu Language Models**")
 
 # -----------------------------
-# Evaluation
+# RESEARCH PROBLEM
 # -----------------------------
-st.header("Evaluation Strategy")
+elif section == "Research Problem":
+    st.header("Research Problem")
 
-st.markdown("""
-The proposed tokenizer is evaluated within a full language modelling
-pipeline using the following metrics:
+    level = st.radio(
+        "Select explanation depth",
+        ["High-level", "Technical"]
+    )
 
-- Token fertility to measure segmentation efficiency.
-- Morphological edit distance to assess alignment with gold morpheme
-  boundaries.
-- Boundary precision, recall, and F1 score.
-- Cross-entropy loss and perplexity for language modelling performance.
-- BLEU score to evaluate generated text quality.
-""")
-
-# -----------------------------
-# Tools and Technologies
-# -----------------------------
-st.header("Tools and Technologies")
-
-st.markdown("""
-- Python  
-- Rule-based morphological parsing  
-- Byte Pair Encoding (BPE)  
-- Transformer-based language models  
-- PyTorch / deep learning frameworks  
-""")
+    if level == "High-level":
+        st.markdown("""
+        isiZulu is morphologically complex, with rich prefixation and
+        agglutination. Standard subword tokenization methods such as BPE
+        ignore linguistic structure, often producing fragmentations that
+        break valid morpheme boundaries. This negatively affects language
+        modelling and text generation.
+        """)
+    else:
+        st.markdown("""
+        Standard BPE operates purely on frequency-based merges without
+        awareness of isiZulu morphological templates. This leads to
+        invalid cross-morpheme merges, inflated token fertility, and
+        reduced generalization. The research introduces morphology-aware
+        constraints derived from SADiLaR protocols to prevent such merges.
+        """)
 
 # -----------------------------
-# Contribution
+# METHODOLOGY
 # -----------------------------
-st.header("Research Contribution")
+elif section == "Methodology":
+    st.header("Methodology")
 
-st.markdown("""
-This research contributes:
+    steps = st.multiselect(
+        "Select components of the methodology",
+        [
+            "Morphological rule formalisation",
+            "Rule-based tokenizer implementation",
+            "BPE constraint integration",
+            "Transformer language model training",
+            "Comparative evaluation"
+        ],
+        default=[
+            "Morphological rule formalisation",
+            "Rule-based tokenizer implementation",
+            "BPE constraint integration",
+            "Transformer language model training",
+            "Comparative evaluation"
+        ]
+    )
 
-- A linguistically grounded morpheme-aware tokenizer for isiZulu.
-- A reproducible integration strategy for linguistic rules and subword
-  tokenization.
-- Empirical evidence that morphology-aware tokenization improves language
-  modelling for agglutinative African languages.
-- A step toward fairer and more inclusive language technologies for
-  low-resource languages.
-""")
+    for step in steps:
+        st.markdown(f"- {step}")
 
 # -----------------------------
-# Contact
+# TOKENIZER PIPELINE
 # -----------------------------
-st.header("Contact")
+elif section == "Tokenizer Pipeline":
+    st.header("Tokenizer Pipeline")
 
-st.markdown("""
-For academic collaboration or research inquiries:
+    stage = st.selectbox(
+        "View pipeline stage",
+        [
+            "Input Text",
+            "Morphological Segmentation",
+            "BPE-Constrained Subword Learning",
+            "Final Token Output"
+        ]
+    )
 
-**Email:** luyanda.mpanza@unizulu.ac.za  
-**Institution:** University of Zululand
-""")
+    example = "ngiyabathanda"
+
+    if stage == "Input Text":
+        st.code(example)
+
+    elif stage == "Morphological Segmentation":
+        st.code("ngi-ya-ba-thand-a")
+
+    elif stage == "BPE-Constrained Subword Learning":
+        st.code("ngi | ya | ba | thand | a")
+
+    else:
+        st.code(["ngi", "ya", "ba", "thand", "a"])
+
+# -----------------------------
+# EVALUATION METRICS
+# -----------------------------
+elif section == "Evaluation Metrics":
+    st.header("Evaluation Metrics")
+
+    metric = st.selectbox(
+        "Select metric",
+        [
+            "Token Fertility",
+            "Morphological Edit Distance",
+            "Boundary F1 Score",
+            "Perplexity",
+            "BLEU Score"
+        ]
+    )
+
+    explanations = {
+        "Token Fertility": "Average number of tokens per word. Lower is better.",
+        "Morphological Edit Distance": "Measures divergence from gold morpheme boundaries.",
+        "Boundary F1 Score": "Precision and recall of predicted morpheme boundaries.",
+        "Perplexity": "Model uncertainty in predicting the next token.",
+        "BLEU Score": "Quality of generated text compared to reference output."
+    }
+
+    st.info(explanations[metric])
+
+# -----------------------------
+# CONTRIBUTION & IMPACT
+# -----------------------------
+elif section == "Contribution & Impact":
+    st.header("Contribution & Impact")
+
+    impact = st.checkbox("Show research impact")
+
+    if impact:
+        st.markdown("""
+        - First linguistically constrained BPE tokenizer for isiZulu.
+        - Demonstrates measurable improvements in language modelling.
+        - Supports responsible and inclusive AI for African languages.
+        - Aligns with national AI strategy and language preservation efforts.
+        """)
+
