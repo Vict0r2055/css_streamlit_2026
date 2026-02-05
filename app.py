@@ -17,8 +17,8 @@ st.write(f"**Field of Research:** {field}")
 st.write(f"**Institution:** {institution}")
 
 st.image(
-    "https://pixabay.com/photos/porsche-911-turbo-porsche-911-911-1312279/",
-    caption="Porsche"
+    "https://media.istockphoto.com/id/1312417734/photo/social-networking-service-streaming-video-communication-network-3d-illustration.jpg?s=612x612&w=0&k=20&c=47NEEanUyccCuon_zhqlgS3KIoYMjJX6ltsaLuTAUQ4=",
+    caption="Social"
 )
 
 # Add a section for publications
@@ -118,3 +118,4 @@ elif data_option == "Weather Data":
 st.header("Contact Information")
 email = "jane.doe@example.com"
 st.write(f"You can reach {name} at {email}.")
+
